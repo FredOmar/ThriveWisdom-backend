@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: thrive-postgres
+    environment:
+      POSTGRES_DB: thrivewisdom
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5432:5432"]         # expone PG a tu Mac
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: ./ThriveWisdom.API    # ruta de tu proyecto API
+    container_name: thrive-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # Estas vienen de tu .env local (NO se sube a git)
+      ConnectionStrings__DefaultConnection: ${CONNECTIONSTRINGS__DEFAULTCONNECTION}
+      Jwt__ActiveKid: ${JWT__ACTIVEKID}
+      Jwt__Keys__0__Kid: ${JWT__KEYS__0__KID}
+      Jwt__Keys__0__Key: ${JWT__KEYS__0__KEY}
+      Smtp__Host: ${SMTP__HOST}
+      Smtp__Port: ${SMTP__PORT}
+      Smtp__User: ${SMTP__USER}
+      Smtp__Pass: ${SMTP__PASS}
+      Smtp__From: ${SMTP__FROM}
+      Cors__AllowedOrigins__0: ${CORS__ALLOWEDORIGINS__0}
+    ports: ["5106:8080"]         # tu API queda en http://localhost:5106
+    depends_on: [postgres]
+
+volumes:
+  pgdata:

@@ -1,0 +1,15 @@
+# dotnet
+bin/
+obj/
+*.user
+*.suo
+
+# secrets
+.env
+appsettings.*.local.json
+secrets.json
+
+# editor/OS
+.vscode/
+.idea/
+.DS_Store
